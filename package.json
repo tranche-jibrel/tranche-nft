@@ -1,0 +1,30 @@
+{
+  "name": "bi-nft",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.5.0",
+    "@openzeppelin/contracts-upgradeable": "^4.5.2",
+    "@truffle/hdwallet-provider": "^1.4.1",
+    "chai": "^4.3.4",
+    "dotenv": "^16.0.0",
+    "truffle": "latest",
+    "web3": "latest"
+  },
+  "devDependencies": {
+    "@openzeppelin/test-helpers": "^0.5.15",
+    "@openzeppelin/truffle-upgrades": "^1.15.0",
+    "eth-gas-reporter": "^0.2.22",
+    "ganache-cli": "^6.12.2",
+    "ganache-time-traveler": "^1.0.16",
+    "solidity-coverage": "0.7.16",
+    "truffle-contract-size": "^2.0.1",
+    "truffle-plugin-verify": "^0.5.24"
+  }
+}
