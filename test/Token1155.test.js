@@ -55,7 +55,7 @@ contract('Token1155', function (accounts) {
     it('tokenOwner can mint tokens', async function () {
       const tokenId = new BN('100');
 
-      const receipt = await erc1155Contract.mint(tokenOwner, tokenId, 3, 0x11, { from: tokenOwner });
+      const receipt = await erc1155Contract.mint(tokenOwner, tokenId, 3, 0x22, { from: tokenOwner });
       expectEvent(receipt, 'TransferSingle'/*, { operator: tokenOwner, from: ZERO_ADDRESS, to: other1, id: tokenId, amount: 3 }*/);
 
       expect(await erc1155Contract.balanceOf(tokenOwner, tokenId)).to.be.bignumber.equal('3');
@@ -127,7 +127,7 @@ contract('Token1155', function (accounts) {
 
   describe('burning', function () {
     it('holders can burn their tokens', async function () {
-      const tokenId = new BN('0');
+      const tokenId = new BN('50');
 
       await erc1155Contract.mint(other1, tokenId, 10, 0x55, { from: tokenOwner });
 
@@ -137,6 +137,13 @@ contract('Token1155', function (accounts) {
 
       expect(await erc1155Contract.balanceOf(other1, tokenId)).to.be.bignumber.equal('8');
       expect(await erc1155Contract.totalSupply(tokenId)).to.be.bignumber.equal('8');
+    });
+  });
+
+  describe('some tests to increase coverage percentage', function () {
+    it('check other functions', async function () {
+      expect(await erc1155Contract.exists(40)).to.be.false;
+      expect(await erc1155Contract.exists(2)).to.be.true;
     });
   });
 });

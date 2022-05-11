@@ -22,7 +22,7 @@ Tranche finance nft project
         </tr>
         <tr>
             <td>Token1155</td>
-            <td><code>82.93%</code></td>
+            <td><code>96.15%</code></td>
             <td>---</td>
         </tr>
     </tbody>
@@ -53,12 +53,12 @@ Limit is 24 KiB for single contract
         </tr>
         <tr>
             <td>Token1155</td>
-            <td><code>15.50</code></td>
+            <td><code>11.97</code></td>
             <td>Generic ERC1155 token contract (logic)</td>
         </tr>
         <tr>
             <td>Token1155Storage</td>
-            <td><code>1.39</code></td>
+            <td><code>0.89</code></td>
             <td>Generic ERC1155 (storage)</td>
         </tr>
     </tbody>

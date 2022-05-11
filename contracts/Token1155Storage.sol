@@ -17,13 +17,10 @@ contract Token1155Storage {
     uint256 public constant HighStakes = 5;
 
     // Mapping from owner to list of owned token IDs
-    mapping(address => mapping(uint256 => uint256)) public _ownedTokens;
-
-    // Mapping from owner to list of owned token IDs
-    mapping(address => uint256[]) public _ownedIDTokens;
+    mapping(address => uint256[]) public ownedIDTokens;
 
     // totalSupply for tokenId
-    mapping(uint256 => uint256) public _totalSupply;
+    mapping(uint256 => uint256) public totalSupply;
 
     string public baseMetadataURI;
 }

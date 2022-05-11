@@ -21,17 +21,16 @@ contract Token1155 is Token1155Storage, OwnableUpgradeable, AccessControlEnumera
         string memory uriCompleted = string(abi.encodePacked(baseMetadataURI, "{id}.json"));
         __ERC1155_init(uriCompleted);
 
-        _mint(_msgSender(), RideOrDai, 100, "Hold JNT/SLICE since ICO"); // each can burn 250000 slice
-        _mint(_msgSender(), Maxi, 5, "Buy from ICO with BTC and hold"); // each can burn 250000 slice
-        _mint(_msgSender(), Ninja, 200, "Participate in JNT-SLICE Swap / hold"); // each can burn 50000 slice
-        _mint(_msgSender(), HalfBaked, 5, "Contribute to the Tranche Protocol"); // each can burn 100000 slice
-        _mint(_msgSender(), HighStakes, 25, "Stake $SLICE from Day 1"); // each can burn 100000 slice
-
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-
         _setupRole(MINTER_ROLE, _msgSender());
         _setupRole(PAUSER_ROLE, _msgSender());
         _setupRole(URI_SETTER_ROLE, _msgSender());
+
+        mint(_msgSender(), RideOrDai, 100, "Hold JNT/SLICE since ICO"); // each can burn 250000 slice
+        mint(_msgSender(), Maxi, 5, "Buy from ICO with BTC and hold"); // each can burn 250000 slice
+        mint(_msgSender(), Ninja, 200, "Participate in JNT-SLICE Swap / hold"); // each can burn 50000 slice
+        mint(_msgSender(), HalfBaked, 5, "Contribute to the Tranche Protocol"); // each can burn 100000 slice
+        mint(_msgSender(), HighStakes, 25, "Stake $SLICE from Day 1"); // each can burn 100000 slice
     }
 
     /**
@@ -48,15 +47,15 @@ contract Token1155 is Token1155Storage, OwnableUpgradeable, AccessControlEnumera
     /**
      * @dev Total amount of tokens in with a given id.
      */
-    function totalSupply(uint256 id) public view override returns (uint256) {
-        return _totalSupply[id];
+    function totalSupplyById(uint256 id) public view override returns (uint256) {
+        return totalSupply[id];
     }
 
     /**
      * @dev Indicates weither any token exist with a given id, or not.
      */
     function exists(uint256 id) external view override returns (bool) {
-        return totalSupply(id) > 0;
+        return totalSupplyById(id) > 0;
     }
 
     // _uriBase like "https://...../" without "{id}.json"
@@ -76,9 +75,9 @@ contract Token1155 is Token1155Storage, OwnableUpgradeable, AccessControlEnumera
     function mint(address to,
             uint256 id,
             uint256 amount,
-            bytes memory data) external whenNotPaused onlyRole(MINTER_ROLE) {
+            bytes memory data) public whenNotPaused onlyRole(MINTER_ROLE) {
         _mint(to, id, amount, data);
-        _totalSupply[id] += amount;
+        totalSupply[id] += amount;
     }
 
     // /**
@@ -90,7 +89,7 @@ contract Token1155 is Token1155Storage, OwnableUpgradeable, AccessControlEnumera
     //         bytes memory data) external whenNotPaused onlyRole(MINTER_ROLE) {
     //     _mintBatch(to, ids, amounts, data);
     //     for (uint256 i = 0; i < ids.length; ++i) {
-    //         _totalSupply[ids[i]] += amounts[i];
+    //         totalSupply[ids[i]] += amounts[i];
     //     }
     // }
 
@@ -102,7 +101,7 @@ contract Token1155 is Token1155Storage, OwnableUpgradeable, AccessControlEnumera
             uint256 amount) external override whenNotPaused {
         require(account == _msgSender() || isApprovedForAll(account, _msgSender()), "Token1155: caller is not owner nor approved");
         _burn(account, id, amount);
-        _totalSupply[id] -= amount;
+        totalSupply[id] -= amount;
     }
 
     // /**
@@ -114,7 +113,7 @@ contract Token1155 is Token1155Storage, OwnableUpgradeable, AccessControlEnumera
     //     require(account == _msgSender() || isApprovedForAll(account, _msgSender()), "Token1155: caller is not owner nor approved");
     //     _burnBatch(account, ids, amounts);
     //     for (uint256 i = 0; i < ids.length; ++i) {
-    //         _totalSupply[ids[i]] -= amounts[i];
+    //         totalSupply[ids[i]] -= amounts[i];
     //     }
     // }
 
@@ -146,43 +145,4 @@ contract Token1155 is Token1155Storage, OwnableUpgradeable, AccessControlEnumera
         _unpause();
     }
 
-    function _beforeTokenTransfer(address operator,
-            address from,
-            address to,
-            uint256[] memory ids,
-            uint256[] memory amounts,
-            bytes memory data) internal override {
-        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
-
-        uint256 toIDsLen = _ownedIDTokens[to].length;
-        for(uint256 j = 0; j < ids.length; j++) {
-            bool found = false;
-            uint256 i;
-            for (i = 0; i < toIDsLen; i++) {
-                if (_ownedIDTokens[to][i] == ids[j]) {
-                    found = true;
-                }
-            }
-
-            if (!found) {
-                _ownedIDTokens[to].push(ids[j]);
-            }
-
-            if(from != address(0) && balanceOf(from, j) == 0) {
-                _ownedIDTokens[to][j] = 0;
-            }
-        }
-    }
-
-    function tokenOfOwnerById(address owner, uint256 id) external view override returns (uint256) {
-        return _ownedTokens[owner][id];
-    }
-
-    function getOwnerTokenIDLen(address _owner) external view override returns (uint256) {
-        return _ownedIDTokens[_owner].length;
-    }
-
-    function getOwnerTokenIDValue(address _owner, uint256 index) external view override returns (uint256) {
-        return _ownedIDTokens[_owner][index];
-    }
 }
