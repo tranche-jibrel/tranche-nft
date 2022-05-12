@@ -11,8 +11,12 @@ const Slice = artifacts.require("Slice");
 const StableCoin = artifacts.require("StableCoin");
 const Logic = artifacts.require("Logic");
 
-contract('Token1155', function (accounts) {
+const fromWei = (x) => web3.utils.fromWei(x.toString());
+const toWei = (x) => web3.utils.toWei(x.toString());
+
+contract('Logic contract', function (accounts) {
     const [ tokenOwner, other1, other2 ] = accounts;
+    const treasury = accounts[9];
   
     const DEFAULT_ADMIN_ROLE = '0x0000000000000000000000000000000000000000000000000000000000000000';
     const MINTER_ROLE = web3.utils.soliditySha3('MINTER_ROLE');
@@ -44,7 +48,65 @@ contract('Token1155', function (accounts) {
     });
 
     it('token state and distribution', async function () {   
+        expect(await sliceContract.balanceOf(tokenOwner)).to.be.bignumber.equal(toWei(20000000));
+        expect(await stableContract.balanceOf(tokenOwner)).to.be.bignumber.equal(toWei(10000000));
 
+        await sliceContract.transfer(other1, toWei(1000000), { from: tokenOwner });
+        await sliceContract.transfer(other2, toWei(2000000), { from: tokenOwner });
+        expect(await sliceContract.balanceOf(other1)).to.be.bignumber.equal(toWei(1000000));
+        expect(await sliceContract.balanceOf(other2)).to.be.bignumber.equal(toWei(2000000));
+
+        await stableContract.transfer(treasury, toWei(1500000), { from: tokenOwner });
+        expect(await stableContract.balanceOf(treasury)).to.be.bignumber.equal(toWei(1500000));
+
+        expect(await erc1155Contract.balanceOf(tokenOwner, 1)).to.be.bignumber.equal('100');
+        expect(await erc1155Contract.balanceOf(tokenOwner, 2)).to.be.bignumber.equal('5');
+        expect(await erc1155Contract.balanceOf(tokenOwner, 3)).to.be.bignumber.equal('200');
+        expect(await erc1155Contract.balanceOf(tokenOwner, 4)).to.be.bignumber.equal('5');
+        expect(await erc1155Contract.balanceOf(tokenOwner, 5)).to.be.bignumber.equal('25');
+
+        await erc1155Contract.safeBatchTransferFrom(tokenOwner, other1, [1, 2, 3, 4, 5], [20, 1, 50, 2, 8], 0x22, {from: tokenOwner});
+        expect(await erc1155Contract.balanceOf(other1, 1)).to.be.bignumber.equal('20');
+        expect(await erc1155Contract.balanceOf(other1, 2)).to.be.bignumber.equal('1');
+        expect(await erc1155Contract.balanceOf(other1, 3)).to.be.bignumber.equal('50');
+        expect(await erc1155Contract.balanceOf(other1, 4)).to.be.bignumber.equal('2');
+        expect(await erc1155Contract.balanceOf(other1, 5)).to.be.bignumber.equal('8');
+
+        await erc1155Contract.safeBatchTransferFrom(tokenOwner, other2, [1, 2, 3, 4, 5], [30, 2, 60, 1, 10], 0x33, {from: tokenOwner});
+        expect(await erc1155Contract.balanceOf(other2, 1)).to.be.bignumber.equal('30');
+        expect(await erc1155Contract.balanceOf(other2, 2)).to.be.bignumber.equal('2');
+        expect(await erc1155Contract.balanceOf(other2, 3)).to.be.bignumber.equal('60');
+        expect(await erc1155Contract.balanceOf(other2, 4)).to.be.bignumber.equal('1');
+        expect(await erc1155Contract.balanceOf(other2, 5)).to.be.bignumber.equal('10');
+    });
+
+    describe('minting', function () {
+        it('send only nft to logic contract --> no slice, no stables', async function () { 
+            await erc1155Contract.setApprovalForAll(logicContract.address, true, {from: other1})
+            // await sliceContract.approve(logicContract.address, toWei(1000000), {from: other1})
+            await logicContract.destroyTokens(3, 5, 0, {from: other1});
+            expect(await erc1155Contract.balanceOf(other1, 3)).to.be.bignumber.equal('45');
+            expect(await sliceContract.balanceOf(other1)).to.be.bignumber.equal(toWei(1000000));
+            expect(await stableContract.balanceOf(other1)).to.be.bignumber.equal(toWei(0));
+        });
+
+        it('send nft to logic contract with too much slice token to redeem --> revert', async function () { 
+            await sliceContract.approve(logicContract.address, toWei(1000000), {from: other1});
+            await expectRevert(logicContract.destroyTokens(3, 1, toWei(100000), {from: other1}), "too much Slice to be burned");
+            expect(await erc1155Contract.balanceOf(other1, 3)).to.be.bignumber.equal('45');
+            expect(await sliceContract.balanceOf(other1)).to.be.bignumber.equal(toWei(1000000));
+            expect(await stableContract.balanceOf(other1)).to.be.bignumber.equal(toWei(0));
+        });
+
+        it('send enough nft tokens to logic contract with allowed amount slice token to redeem --> ok', async function () { 
+            tx = await stableContract.approve(logicContract.address, toWei(1500000), {from: treasury});
+            tx = await sliceContract.approve(logicContract.address, toWei(1000000), {from: other1});
+
+            tx = await logicContract.destroyTokens(3, 2, toWei(100000), {from: other1});
+            expect(await erc1155Contract.balanceOf(other1, 3)).to.be.bignumber.equal('43');
+            expect(await sliceContract.balanceOf(other1)).to.be.bignumber.equal(toWei(900000));
+            expect(await stableContract.balanceOf(other1)).to.be.bignumber.equal(toWei(50000));
+        });
     });
 
 });

@@ -51,6 +51,8 @@ contract Logic is LogicStorage, OwnableUpgradeable {
         require (_sliceAmount <= maxSliceAmount, "too much Slice to be burned");
 
         IToken1155(token1155Address).burn(_msgSender(), _id, _nftAmount);
+
+        SafeERC20Upgradeable.safeTransferFrom(IERC20Upgradeable(sliceAddress), _msgSender(), address(this), _sliceAmount);
         ISlice(sliceAddress).burn(_sliceAmount);
 
         // TODO: send stables to burner

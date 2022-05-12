@@ -12,7 +12,7 @@ contract StableCoin is OwnableUpgradeable, ERC20Upgradeable {
     function initialize(uint256 _initialSupply) public initializer {
         OwnableUpgradeable.__Ownable_init();
         ERC20Upgradeable.__ERC20_init_unchained("SLICE", "SLC");
-        _mint(msg.sender, _initialSupply.mul(uint(1e18)));
+        _mint(msg.sender, _initialSupply.mul(1e18));
     }
 
 }

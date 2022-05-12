@@ -17,7 +17,7 @@ Tranche finance nft project
     <tbody>
         <tr>
             <td>Logic</td>
-            <td><code>20.69%</code></td>
+            <td><code>60.00%</code></td>
             <td>---</td>
         </tr>
         <tr>
@@ -43,7 +43,7 @@ Limit is 24 KiB for single contract
     <tbody>
         <tr>
             <td>Logic</td>
-            <td><code>3.36</code></td>
+            <td><code>3.39</code></td>
             <td>Logic for managing project (logic)</td>
         </tr>
         <tr>
