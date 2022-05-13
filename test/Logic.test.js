@@ -107,6 +107,15 @@ contract('Logic contract', function (accounts) {
             expect(await sliceContract.balanceOf(other1)).to.be.bignumber.equal(toWei(900000));
             expect(await stableContract.balanceOf(other1)).to.be.bignumber.equal(toWei(50000));
         });
+
+        it('ading some test for increasing percentage', async function () {  
+            tx = await logicContract.changeAddresses(erc1155Contract.address, sliceContract.address, treasury, stableContract.address, {from: tokenOwner});
+            tx = await logicContract.changeRedemptionFactor(toWei(0.1), {from: tokenOwner});
+            await logicContract.destroyTokens(1, 1, 0, {from: other1});
+            await logicContract.destroyTokens(2, 1, 0, {from: other1});
+            await logicContract.destroyTokens(4, 1, 0, {from: other1});
+            await logicContract.destroyTokens(5, 1, 0, {from: other1});
+        });
     });
 
 });

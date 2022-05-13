@@ -17,7 +17,7 @@ Tranche finance nft project
     <tbody>
         <tr>
             <td>Logic</td>
-            <td><code>60.00%</code></td>
+            <td><code>96.67%</code></td>
             <td>---</td>
         </tr>
         <tr>
