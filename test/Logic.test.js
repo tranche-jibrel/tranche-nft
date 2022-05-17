@@ -100,12 +100,12 @@ contract('Logic contract', function (accounts) {
 
         it('send enough nft tokens to logic contract with allowed amount slice token to redeem --> ok', async function () { 
             tx = await stableContract.approve(logicContract.address, toWei(1500000), {from: treasury});
-            tx = await sliceContract.approve(logicContract.address, toWei(1000000), {from: other1});
+            tx = await sliceContract.approve(logicContract.address, toWei(10000), {from: other1});
 
-            tx = await logicContract.destroyTokens(3, 2, toWei(100000), {from: other1});
-            expect(await erc1155Contract.balanceOf(other1, 3)).to.be.bignumber.equal('43');
-            expect(await sliceContract.balanceOf(other1)).to.be.bignumber.equal(toWei(900000));
-            expect(await stableContract.balanceOf(other1)).to.be.bignumber.equal(toWei(50000));
+            tx = await logicContract.destroyTokens(3, 40, toWei(10000), {from: other1});
+            expect(await erc1155Contract.balanceOf(other1, 3)).to.be.bignumber.equal('5');
+            expect(await sliceContract.balanceOf(other1)).to.be.bignumber.equal(toWei(990000));
+            expect(await stableContract.balanceOf(other1)).to.be.bignumber.equal(toWei(5000));
         });
 
         it('ading some test for increasing percentage', async function () {  

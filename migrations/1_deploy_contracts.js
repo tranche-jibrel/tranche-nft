@@ -30,7 +30,7 @@ module.exports = async (deployer, network, accounts) => {
     console.log('T1155instance Deployed: ', T1155instance.address);
     console.log('Is deployer T1155instance default admin: ', await T1155instance.hasRole(DEFAULT_ADMIN_ROLE, tokenOwner));
 
-    const myLogicinstance = await deployProxy(Logic, [T1155instance.address, mySliceinstance.address, treasury, 
+    const myLogicinstance = await deployProxy(Logic, [T1155instance.address, mySliceinstance.address, treasury, /*tokenOwner,*/
       myStableCoininstance.address, web3.utils.toWei("0.5")], {from: tokenOwner});
     console.log('Logic Address: ', myLogicinstance.address);
     
@@ -47,9 +47,9 @@ module.exports = async (deployer, network, accounts) => {
     } else {
       // deploy new contract
       try {
-        const TF1155instance = await deployProxy(TokenFactory1155, [], { from: tokenOwner });
-        console.log('TF1155instance Deployed: ', TF1155instance.address);
-        console.log('Is deployer TF1155instance admin: ', await TF1155instance.hasRole(DEFAULT_ADMIN_ROLE, accounts[0]));
+        // const TF1155instance = await deployProxy(TokenFactory1155, [], { from: tokenOwner });
+        // console.log('TF1155instance Deployed: ', TF1155instance.address);
+        // console.log('Is deployer TF1155instance admin: ', await TF1155instance.hasRole(DEFAULT_ADMIN_ROLE, accounts[0]));
 
       } catch (error) {
         console.log(error);

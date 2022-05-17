@@ -1,7 +1,70 @@
 # Tranche NFT
 Tranche finance nft project
 
-## 🤔 Note
+## **NFT Types & Privileges** 🤔
+
+This section outlines the types of NFTs distributed, for what, and what privileges they provide:
+
+<table>
+    <thead>
+      <tr>
+        <th>NFT Name</th>
+        <th>Access</th>
+        <th>Privilege</th>
+        <th>#</th>
+        <th>Maximum</th>
+        <th>SLICE/NFT</th>
+        <th>Predicted</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Ride or DAI</td>
+            <td>Hold JNT/SLICE since ICO</td>
+            <td>Redeem SLICE @X.XX</td>
+            <td>100</td>
+            <td>250,000</td>
+            <td>2,500</td>
+            <td>$X.XX</td>
+        </tr>
+        <tr>
+            <td>Maxi</td>
+            <td>Buy from ICO with BTC and hold</td>
+            <td>Redeem SLICE @X.XX</td>
+            <td>5</td>
+            <td>250,000</td>
+            <td>50,000</td>
+            <td>$X.XX</td>
+        </tr>
+        <tr>
+            <td>Ninja</td>
+            <td>Partecipate in JNT/SLICE swap/hold</td>
+            <td>Redeem SLICE @X.XX</td>
+            <td>200</td>
+            <td>50,000</td>
+            <td>250</td>
+            <td>$X.XX</td>
+        </tr>
+        <tr>
+            <td>Half-baked</td>
+            <td>Contribute to the Tranche Protocol</td>
+            <td>Redeem SLICE @X.XX</td>
+            <td>5</td>
+            <td>100,000</td>
+            <td>20,000</td>
+            <td>$X.XX</td>
+        </tr>
+        <tr>
+            <td>High Stakes</td>
+            <td>Stake $SLICE from Day 1</td>
+            <td>Redeem SLICE @X.XX</td>
+            <td>25</td>
+            <td>100,000</td>
+            <td>4,000</td>
+            <td>$X.XX</td>
+        </tr>
+    </tbody>
+  </table>
 
 
 ### Test Coverage
@@ -43,7 +106,7 @@ Limit is 24 KiB for single contract
     <tbody>
         <tr>
             <td>Logic</td>
-            <td><code>3.39</code></td>
+            <td><code>3.48</code></td>
             <td>Logic for managing project (logic)</td>
         </tr>
         <tr>
