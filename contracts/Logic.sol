@@ -62,7 +62,7 @@ contract Logic is LogicStorage, OwnableUpgradeable, ReentrancyGuardUpgradeable {
     }
     */
 
-    function destroyTokens(uint256 _id, uint256 _nftAmount, uint256 _sliceAmount) public nonReentrant returns (bool) {
+    function destroyTokens(uint256 _id, uint256 _nftAmount, uint256 _sliceAmount) external nonReentrant returns (bool) {
         uint maxSliceAmount;
         
         if (_id == 1) {

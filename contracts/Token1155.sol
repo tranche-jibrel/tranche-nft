@@ -140,7 +140,7 @@ contract Token1155 is Token1155Storage, OwnableUpgradeable, AccessControlEnumera
      *
      * - the caller must have the `PAUSER_ROLE`.
      */
-    function unpause() public {
+    function unpause() external {
         require(hasRole(PAUSER_ROLE, _msgSender()), "Token1155: must have pauser role to unpause");
         _unpause();
     }
